@@ -1,7 +1,7 @@
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Kind {
     Number(i32),
-    Float(i32, i32),
+    Float(i32, i32, i32),
     Plus,
     Minus,
     Mul,

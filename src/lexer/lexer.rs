@@ -44,15 +44,17 @@ pub fn lex(input: String) -> Vec<Token> {
                 continue;
             }
 
+            let mut scale = 0;
             let mut fractional = 0;
             while pos < size && chars[pos].is_digit(10) {
                 fractional *= 10;
                 fractional += chars[pos] as i32 - '0' as i32;
                 pos += 1;
+                scale += 1;
             }
 
             let new_token = Token {
-                kind: Kind::Float(integer, fractional),
+                kind: Kind::Float(integer, fractional, scale),
                 start: start,
                 end: pos,
             };
@@ -92,13 +94,13 @@ mod tests {
     fn right() {
         let input = String::from("12.3");
         let result = lex(input);
-        assert_eq!(result[0].kind, Kind::Float(12, 3));
+        assert_eq!(result[0].kind, Kind::Float(12, 3, 1));
     }
 
     #[test]
     fn wrong() {
         let input = String::from("12.03");
         let result = lex(input);
-        assert_eq!(result[0].kind, Kind::Float(12, 3));
+        assert_eq!(result[0].kind, Kind::Float(12, 3, 2));
     }
 }

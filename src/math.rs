@@ -12,6 +12,18 @@ pub fn calc(output_queue: &mut ListQueue<Token>) -> Result<f64, String> {
             Kind::Number(num) => {
                 nums.push(num as f64);
             }
+            Kind::Float(integer, fractional, scale) => {
+                let mut value = integer as f64;
+                let mut temp = fractional;
+                let mut scale = scale;
+                while temp > 0 {
+                    value += 0.1_f64.powi(scale) * (temp % 10) as f64;
+                    scale -= 1;
+                    temp /= 10;
+                }
+
+                nums.push(value);
+            }
             Kind::Plus | Kind::Minus | Kind::Mul | Kind::Div => {
                 let a = nums.pop().ok_or("missing operand")?;
                 let b = nums.pop().ok_or("missing operand")?;

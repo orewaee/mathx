@@ -38,7 +38,7 @@ fn shunting_yard(input: String) -> ListQueue<Token> {
 
     for token in tokens {
         match token.kind {
-            Kind::Number(_) | Kind::Float(_, _) => output_queue.push(token.clone()),
+            Kind::Number(_) | Kind::Float(_, _, _) => output_queue.push(token.clone()),
             Kind::Plus | Kind::Minus | Kind::Mul | Kind::Div => {
                 while let Some(top) = operator_stack.peek() {
                     if priority.get(&top.kind).unwrap_or(&0)
