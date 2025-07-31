@@ -13,5 +13,5 @@ pub enum Kind {
 pub struct Token {
     pub kind: Kind,
     pub start: usize,
-    pub end: usize
+    pub end: usize,
 }

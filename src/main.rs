@@ -1,8 +1,10 @@
-use core::error;
 use std::collections::HashMap;
 use std::io;
 
+use clap::Parser;
+
 use crate::{
+    cli::Cli,
     lexer::{
         lexer::lex,
         token::{Kind, Token},
@@ -12,6 +14,7 @@ use crate::{
     stack::{list::ListStack, stack::Stack},
 };
 
+mod cli;
 mod lexer;
 mod list;
 mod math;
@@ -76,17 +79,24 @@ fn shunting_yard(input: String) -> ListQueue<Token> {
 }
 
 fn main() {
-    let mut buf = String::new();
+    // let mut buf = String::new();
 
-    io::stdin()
-        .read_line(&mut buf)
-        .expect("failed to read expression");
+    // io::stdin()
+    //     .read_line(&mut buf)
+    //     .expect("failed to read expression");
 
-    let mut output_queue = shunting_yard(buf);
-    output_queue.println();
+    let cli = Cli::parse();
+    match &cli.command {
+        cli::Commands::Calc { exp } => {
+            let exp = exp.clone();
 
-    match calc(&mut output_queue) {
-        Ok(result) => println!("result: {}", result),
-        Err(err) => println!("err: {}", err),
+            let mut output_queue = shunting_yard(exp);
+            output_queue.println();
+
+            match calc(&mut output_queue) {
+                Ok(result) => println!("result: {}", result),
+                Err(err) => println!("err: {}", err),
+            }
+        }
     }
 }
